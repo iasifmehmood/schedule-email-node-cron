@@ -14,6 +14,12 @@ app.get('/', (req, res) => {
 
 app.post('/send', (req, res) => {
   const { email, minute, hour, date, month, day } = req.body;
+  const valid = cron.validate(`${minute} ${hour} ${date} ${month} ${day} `);
+  if (!valid) {
+    res.status(400).json({
+      status: 'string is not valid cron',
+    });
+  }
   console.log('entered api');
   cron.schedule(
     `${minute} ${hour} ${date} ${month} ${day} `,
